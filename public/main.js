@@ -1,81 +1,89 @@
 var thumbUp = document.getElementsByClassName("fa-thumbs-up");
 var thumbDown = document.getElementsByClassName("fa-thumbs-down");
 var trash = document.getElementsByClassName("fa-trash-o");
+// Thumbs Up
+// Handle Thumbs Up
+Array.from(thumbUp).forEach(function (element) {
+  element.addEventListener('click', function () {
+    const post = this.closest('.artist'); // Get the closest parent element with class "artist"
+    const postId = post.dataset.id; // Use the data-id attribute for _id
+    const thumbCount = parseInt(post.querySelector('.thumb-count').innerText);
 
-Array.from(thumbUp).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const email = this.parentNode.parentNode.childNodes[1].innerText
-        const artistName = this.parentNode.parentNode.childNodes[3].innerText
-        const songTitle = this.parentNode.parentNode.childNodes[5].innerText
-        const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[7].innerText)
-        fetch('chartedSongs', {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            'email': email,
-            'artistName': artistName,
-            'songTitle': songTitle,
-            'thumbUp':thumbUp
-          })
-        })
-        .then(response => {
-          if (response.ok) return response.json()
-        })
-        .then(data => {
-          console.log(data)
-          window.location.reload(true)
-        })
-      });
-});
-Array.from(thumbDown).forEach(function(element) {
-  element.addEventListener('click', function(){
-    const email = this.parentNode.parentNode.childNodes[1].innerText
-    const artistName = this.parentNode.parentNode.childNodes[3].innerText
-    const songTitle = this.parentNode.parentNode.childNodes[5].innerText
-    const thumbDown = parseFloat(this.parentNode.parentNode.childNodes[7].innerText)
-    fetch('chartedSongs', {
+    fetch('/chartedSongs', {
       method: 'put',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        'email': email,
-        'artistName': artistName,
-        'songTitle': songTitle,
-        'thumbDown' :thumbDown 
+        postId, // Send _id
+        thumbUp: thumbCount + 1, // thumbs up increases
+      }),
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw new Error('Failed to update thumbs up');
       })
-    })
-    .then(response => {
-      if (response.ok) return response.json()
-    })
-  .then(data => {
-    console.log(data)
-    window.location.reload(true)
-  })
-});
-  });
-
-
-
-Array.from(trash).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const email = this.parentNode.parentNode.childNodes[1].innerText
-        const artistName = this.parentNode.parentNode.childNodes[3].innerText
-        const songTitle = this.parentNode.parentNode.childNodes[5].innerText
-        fetch('chartedSongs', {
-          method: 'delete',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            'email': email,
-            'artistName': artistName,
-            'songTitle': songTitle,
-           
-          })
-        }).then(function (response) {
-          window.location.reload()
-        })
+      .then((data) => {
+        console.log(data);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('An error occurred while updating thumbs up.');
       });
+  });
 });
+
+//Thumbs Down
+Array.from(thumbDown).forEach(function (element) {
+  element.addEventListener('click', function () {
+    const post = this.closest('.artist');
+    const postId = post.dataset.id;
+    const thumbCount = parseInt(post.querySelector('.thumb-count').innerText);
+
+    fetch('/chartedSongs', {
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        postId,
+        thumbDown: thumbCount - 1, // thumb count decreases
+      }),
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw new Error('Failed to update thumbs down');
+      })
+      .then((data) => {
+        console.log(data);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('An error occurred while updating thumbs down.');
+      });
+  });
+});
+
+// Delete
+Array.from(trash).forEach(function (element) {
+  element.addEventListener('click', function () {
+    const post = this.closest('.artist');
+    const postId = post.dataset.id;
+
+    fetch('/chartedSongs', {
+      method: 'delete',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ postId }), 
+    })
+      .then((response) => {
+        if (response.ok) window.location.reload();
+        else throw new Error('Failed to delete the song');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the song.');
+      });
+  });
+});
+
 
 //Random radio station!
 document.addEventListener('DOMContentLoaded', function() {

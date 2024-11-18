@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb'); // To import MongoDb Objects, to match objects by their MongoDB object _ID
+
 module.exports = function (app, passport, db) {
   // normal routes ===============================================================
 
@@ -60,46 +62,35 @@ module.exports = function (app, passport, db) {
   });
 
   app.put("/chartedSongs", (req, res) => {
+    const { postId, thumbUp, thumbDown } = req.body;
+  
+    // Determine the field to update
+    const updateField = thumbUp !== undefined ? { thumbUp } : { thumbDown };
+  
     db.collection("chartedSongs").findOneAndUpdate(
-      {
-        email: req.body.email,
-        artistName: req.body.artistName,
-        songTitle: req.body.songTitle,
-      },
-      {
-        $set: {
-          thumbUp:
-            req.body.thumbUp != undefined
-              ? req.body.thumbUp + 1
-              : req.body.thumbDown - 1,
-        },
-      },
-      {
-        sort: { _id: -1 },
-        upsert: true,
-      },
+      { _id: ObjectId(postId) }, // Match by _id
+      { $set: updateField }, // Update the appropriate field
+      { returnOriginal: false }, // Return the updated document
       (err, result) => {
-        if (err) return res.send(err);
-        res.send(result);
+        if (err) return res.status(500).send(err);
+        res.send(result.value); // Send the updated document back to the client
       }
     );
   });
 
   app.delete("/chartedSongs", (req, res) => {
+    const { postId } = req.body;
+  
     db.collection("chartedSongs").findOneAndDelete(
-      {
-        email: req.body.email,
-        artistName: req.body.artistName,
-        songTitle: req.body.songTitle,
-      },
+      { _id: ObjectId(postId) }, // Match by _id thats in MongoDB
       (err, result) => {
-        if (err) return res.send(500, err);
+        if (err) return res.status(500).send(err);
         res.send("Entry deleted!");
       }
     );
   });
 
-  // uses radio statio API to display a random radio station:
+  // uses radio statio API to display a random radio station!
 
   const RadioBrowser = require("radio-browser");
 
