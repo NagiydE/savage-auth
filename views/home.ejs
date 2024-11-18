@@ -1,0 +1,72 @@
+<!--- To fix this app:
+Need to figure out why the trash can not deleting things anymore. Why is it cutting off users response?-->
+
+<!doctype html>
+<html>
+<head>
+    <title>Fave Songs Home</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+
+
+    
+    <div class="page-header text-center">
+        <h1>Home Page</h1>
+        <div>
+          <a href="/profile" class="btn btn-default btn-sm">Profile</a>
+          <a href="/logout" class="btn btn-default btn-sm">Logout</a> 
+      </div>
+   <!--- Displays Radio Station-->
+   <!-- Ref: https://dev.to/ctrlcoding/how-to-create-a-simple-audio-player-in-html-javascript-and-css-4l2e -->
+      <div class="well">
+        <h3>Today's Random Radio Station:</h3>
+        <p>Check back daily for new stations, remember to vote if you like the station!</p>
+        <div id="random-station">
+          <h4 id="station-name">Loading...</h4>
+          <audio id="audio-player" controls>
+              <source id="audio-source" src="" type="audio/mpeg">
+              Your browser does not support the audio element.
+          </audio>
+          <button id="vote-button" class="btn btn-primary">Vote for this station</button>
+        </div>
+      </div>
+      
+   
+    <h3>Our Favorite Songs Right Now:</h3>
+    <ul class="chartedSongs">
+    <% for(var i=0; i<chartedSongs.length; i++) {%>
+      <li class="artist">
+        <span><%= chartedSongs[i].email %></span>
+        <span><%= chartedSongs[i].artistName %></span>
+        <span><%= chartedSongs[i].songTitle %></span>
+        <span><%= chartedSongs[i].thumbUp %></span>
+        
+        <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+        <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
+        <span><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+      </li>
+    <% } %>
+    </ul>
+
+    <h2>Add a song:</h2>
+  <% if (user.local.email) { %>
+    <form action="/chartedSongs" method="POST">
+      <input type="text" value="<%= user.local.email %>" name="email">
+      <input type="text" placeholder="artist name" name="artistName">
+      <input type="text" placeholder="song" name="song">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  <% } %>
+
+
+
+<script src="/main.js"></script>
+
+</body>
+</html>
+

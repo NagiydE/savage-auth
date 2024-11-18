@@ -5,3 +5,73 @@ body{
 img{
   height: 200px;
 }
+
+/* Box Model Hack */
+* {
+  box-sizing: border-box;
+}
+
+/* Clear fix hack */
+.clearfix:after {
+     content: ".";
+     display: block;
+     clear: both;
+     visibility: hidden;
+     line-height: 0;
+     height: 0;
+}
+
+.clear {
+	clear: both;
+}
+
+/******************************************
+/* BASE STYLES
+/*******************************************/
+
+body {
+background-color: darkgoldenrod;
+text-align: center;
+padding: 40px;
+}
+
+
+/******************************************
+/* LAYOUT
+/*******************************************/
+
+
+button, input {
+  width: 30%;
+  height: 3em;
+  font-size: 1.5em;
+  border: 4px solid black;
+  padding: 5px;
+  margin: 10px;
+  border-radius: 20px;
+}
+
+h1 {
+  font-size: 3em;
+}
+h3{
+  font-size: 2em;
+  font-weight: 700;
+}
+
+footer {
+
+}
+
+ li {
+  font-size: 2.5em;
+  font-weight: 100;
+  text-decoration: none;
+  list-style: none;
+
+}
+
+
+/******************************************
+/* ADDITIONAL STYLES
+/*******************************************/
