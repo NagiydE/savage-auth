@@ -5,7 +5,8 @@
 3. Set up your MongoDB database:
 Create a database and collections (users, chartedSongs).
 Update database configuration in your code if necessary.
-4. Open the app in your browser:
+run `node server.js`
+5. Open the app in your browser:
 ## Usage
 Random Radio Station
 The home page (/home) displays a random station daily.
